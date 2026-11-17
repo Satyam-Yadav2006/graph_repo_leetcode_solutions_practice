@@ -1,0 +1,43 @@
+class Solution {
+public:
+    void dfs( unordered_map<int,vector<int>>&adj,int u,vector<int>&visited){
+        visited[u]=true;
+        for(auto &v:adj[u]){
+            if(!visited[v]){
+                dfs(adj,v,visited);
+            }
+        }
+
+    }
+    bool isSame(string &s1,string &s2){
+        int m=s1.size();
+        int diff=0;
+        for(int i=0;i<m;i++){
+            if(s1[i]!=s2[i]){
+                diff++;
+            }
+        }
+        return diff==2||diff==0;
+    }
+    int numSimilarGroups(vector<string>& strs) {
+        int n=strs.size();
+        unordered_map<int,vector<int>>adj;
+        vector<int>visited(n,false);
+        for(int i=0;i<n;i++){
+            for(int j=i+1;j<n;j++){
+                if(isSame(strs[i],strs[j])){
+                    adj[i].push_back(j);
+                    adj[j].push_back(i);
+                }
+            }
+        }
+        int count=0;
+        for(int i=0;i<n;i++){
+            if(!visited[i]){
+                dfs(adj,i,visited);
+                count++;
+            }
+        }
+        return count;
+    }
+};
